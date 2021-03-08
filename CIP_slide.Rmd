@@ -1,0 +1,18 @@
+---
+title: "Tutorial Lecture"
+subtitle: "Covered Interest Rate Parity"  
+author:
+date: 
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["default", 'metropolis', 'metropolis-fonts', 'ou-colors.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+      titleSlideClass: [center, middle]
+---
+# Covered Interest Rate Parity
+
