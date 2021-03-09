@@ -76,7 +76,6 @@ Substituting \eqref{eq.2} in \eqref{eq.1} and assuming $r*\Delta s^e$ to be very
 $$r=r^*+\Delta f$$
 
 ]
-
 ]
 
 ---
