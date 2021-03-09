@@ -5,6 +5,8 @@ author:
 date: 
 output:
   xaringan::moon_reader:
+    includes:
+      in_header: "mathjax-equation-numbers.html"
     lib_dir: libs
     css: ["default", 'metropolis', 'metropolis-fonts', 'ou-colors.css']
     nature:
@@ -14,5 +16,109 @@ output:
       ratio: '16:9'
       titleSlideClass: [center, middle]
 ---
-# Covered Interest Rate Parity
+```{r set up, include=FALSE}
+xaringanExtra::use_panelset()
+xaringanExtra::use_editable()
+xaringanExtra::use_scribble()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_tachyons()
+xaringanExtra::use_webcam()
+knitr::opts_chunk$set(warning = FALSE,
+                      message = F,
+                      fig.align = "center",
+                      fig.dim=c(4.8, 4.5), 
+                      out.width="100%",
+                      fig.retina = 2,
+                      dev = "svg")
 
+
+```
+
+# A quick recap
+- .orange[Nominal exchange rate] $\color{orange}{(S)}$ - Price of domestic currency per unit of foreign currency
+- Arbitrage- Process of buying or selling to exploit .blue[price differential] so as to make a .blue[riskless] profit.
+- .hi-crimson[PPP] implies , in the long run prices , will be same both in home country and foreign country (Assuming transaction costs to be zero)
+$$ 
+P=SP^*
+$$
+- .orange[Real Exchange Rate] $\color{orange}{(p)}$  - Price of foreign relative to domestic goods and services
+$$p=\frac{SP^*}{P}$$
+---
+# Covered Interest Rate Parity
+.panelset[
+.panel[.panel-name[Definition]
+- Investing in a foreign country involves risk- more of speculation than arbitrage
+- By getting in to a .orange[forward contract], the investor is .hi['covered'] against the exchange rate risk
+.left90[
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+The domestic interest rate must be higher(lower) than the foreign interest rate by an amount equal to the forward discount(premium) on the domestic currency
+
+$$r=r^*+\Delta s^e$$]
+]
+]
+.panel[.panel-name[Example]
+```{r,echo=F,out.width = "65%"}
+library(knitr)
+include_graphics('eg1.jpg', dpi = NA)
+```
+
+]
+.panel[.panel-name[Derivation]
+-If .hi-crimson[interest rate parity] holds on .hi-blue[31,December] 
+\begin{equation}
+(1+r)=(1+r^*)\frac{F}{S} \label{eq.1}
+\end{equation}
+We can write,
+\begin{equation}
+\frac{F}{S}=1+\Delta f \label{eq.2}
+\end{equation}
+Substituting \eqref{eq.2} in \eqref{eq.1} and assuming $r*\Delta s^e$ to be very small, we  can obtain
+$$r=r^*+\Delta f$$
+
+]
+
+]
+
+---
+# Uncovered Interest Rate Parity
+.panelset[
+.panel[.panel-name[Definition]
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+The domestic iterest rate must be higher(lower) than the foreign interest rate by an amount equal to the expected depreciation(appreciation) of the domestic currency
+
+$$r=r^*+\Delta s^e$$]]
+.panel[.panel-name[Example 1]
+```{r,echo=F,out.width = "65%"}
+library(knitr)
+include_graphics('eg1.jpg', dpi = NA)
+```
+
+]
+.panel[.panel-name[Derivation]
+-If .hi-crimson[interest rate parity] holds on .hi-blue[31,December] 
+\begin{equation}
+(1+r)=(1+r^*)\frac{S^e}{S} \label{eq.3}
+\end{equation}
+We can write,
+\begin{equation}
+\frac{S^e}{S}=1+\Delta s^e \label{eq.4}
+\end{equation}
+Substituting \eqref{eq.4} in \eqref{eq.3} and assuming $r*\Delta s^e$ to be very small, we  can obtain
+$$r=r^*+\Delta s^e$$
+
+]
+
+]
+
+
+
+
+
+
+
+
+
+
+
+  
+  
