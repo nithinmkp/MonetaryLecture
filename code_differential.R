@@ -16,6 +16,10 @@ data3<-data3 %>%
         mutate(int_diff=((1+data3$`Domestic Rate`/100)-(1+data3$`Foreign Rate`/100))*data3$forward_rate/data3$`Spot Rate`)
 
 data3$Date<-as.Date(data3$Date)
+num_fn<-function(x){
+        x<-as.numeric(x)
+        x<-round(x,3)
+}
 data3[,-1]<-lapply(data3[,-1],num_fn)
 p<-data3 %>% ggplot(aes(x=Date,y=int_diff))+
         geom_line()
