@@ -26,7 +26,7 @@ xaringanExtra::use_webcam()
 knitr::opts_chunk$set(warning = FALSE,
                       message = F,
                       fig.align = "center",
-                      fig.dim=c(4.8, 4.5), 
+                      fig.dim=c(6.8, 5.5), 
                       out.width="100%",
                       fig.retina = 2,
                       dev = "svg")
@@ -53,7 +53,7 @@ $$p=\frac{SP^*}{P}$$
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 The domestic interest rate must be higher(lower) than the foreign interest rate by an amount equal to the forward discount(premium) on the domestic currency
 
-$$r=r^*+\Delta s^e$$]
+$$i=i^*+\Delta f$$]
 ]
 ]
 .panel[.panel-name[Example]
@@ -66,17 +66,106 @@ include_graphics('eg1.jpg', dpi = NA)
 .panel[.panel-name[Derivation]
 -If .hi-crimson[interest rate parity] holds on .hi-blue[31,December] 
 \begin{equation}
-(1+r)=(1+r^*)\frac{F}{S} \label{eq.1}
+(1+i)=(1+i^*)\frac{F}{S} \label{eq.1}
 \end{equation}
 We can write,
 \begin{equation}
 \frac{F}{S}=1+\Delta f \label{eq.2}
 \end{equation}
 Substituting \eqref{eq.2} in \eqref{eq.1} and assuming $r*\Delta s^e$ to be very small, we  can obtain
-$$r=r^*+\Delta f$$
+$$i=i^*+\Delta f$$
 
 ]
 ]
+---
+# Covered Interest Rate Parity (Contd.)
+.panelset[
+.panel[.panel-name[Data]
+```{r include=FALSE}
+packages<-c("readxl","tidyverse","plotly","rlist","rio","janitor","data.table","openxlsx","here")
+sapply(packages,library,character.only=T)
+
+#new data
+files<-list.files(path=here(),pattern = "*.csv")
+data<-map(files,read.csv)
+names<-c("Spot Rate","Domestic Rate","Foreign Rate")
+data<-map2(data,names,~setnames(.x,2,.y))
+data<-map(data,~rename(.x,Date=DATE))
+data2<-list.cbind(data) %>% select(1,2,4,6)
+
+#forward rates
+data3<-data2 %>% mutate(forward_rate=lead(`Spot Rate`,n=12))
+
+data3<-data3 %>% filter(Date<as.Date(data3[which(is.na(data3$forward_rate))[1],1]))
+data3<-data3 %>% 
+        mutate(int_diff=((1+data3$`Domestic Rate`/100)-(1+data3$`Foreign Rate`/100))*data3$forward_rate/data3$`Spot Rate`)
+
+data3$Date<-as.Date(data3$Date)
+num_fn<-function(x){
+        x<-as.numeric(x)
+        x<-round(x,3)
+}
+data3[,-1]<-lapply(data3[,-1],num_fn)
+```
+
+```{r echo=FALSE}
+library(DT)
+data3 %>% datatable(fillContainer = T, options = list(pageLength = 200,
+                                                          scrollY=100))
+```
+]
+.panel[.panel-name[Figure]
+```{r include=FALSE}
+packages<-c("readxl","tidyverse","plotly","rlist","rio","janitor","data.table","openxlsx","here")
+sapply(packages,library,character.only=T)
+
+#new data
+files<-list.files(path=here(),pattern = "*.csv")
+data<-map(files,read.csv)
+names<-c("Spot Rate","Domestic Rate","Foreign Rate")
+data<-map2(data,names,~setnames(.x,2,.y))
+data<-map(data,~rename(.x,Date=DATE))
+data2<-list.cbind(data) %>% select(1,2,4,6)
+
+#forward rates
+data3<-data2 %>% mutate(forward_rate=lead(`Spot Rate`,n=12))
+
+data3<-data3 %>% filter(Date<as.Date(data3[which(is.na(data3$forward_rate))[1],1]))
+data3<-data3 %>% 
+        mutate(int_diff=((1+data3$`Domestic Rate`/100)-(1+data3$`Foreign Rate`/100))*data3$forward_rate/data3$`Spot Rate`)
+
+data3$Date<-as.Date(data3$Date)
+num_fn<-function(x){
+        x<-as.numeric(x)
+        x<-round(x,3)
+}
+data3[,-1]<-lapply(data3[,-1],num_fn)
+p<-data3 %>% ggplot(aes(x=Date,y=int_diff))+
+        geom_line()
+q<-data3 %>% plot_ly()
+r<-q %>% add_trace(x=~Date,y=~int_diff,type="scatter",mode="lines",
+                   name="31-Year Differential",
+                   hoverinfo = "text",
+                   text = ~paste(int_diff, ' %')
+) %>% 
+        layout(title="Interest rate differential",
+               xaxis=list(type="date",
+                          tickformat="%b-%Y",title="Date"),
+               yaxis=list(title="differnital (in %)"))
+r
+```
+
+```{r,echo=F,fig.align='center',fig.height=18}
+r
+```
+
+
+]
+
+
+]
+
+
 
 ---
 # Uncovered Interest Rate Parity
